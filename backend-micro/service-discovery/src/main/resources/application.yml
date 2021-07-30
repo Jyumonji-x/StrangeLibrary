@@ -1,0 +1,20 @@
+spring:
+  jackson:
+    time-zone: GMT+8
+  application:
+    name: eureka-server     #服务名称,自定义
+  security:
+    user:
+      name: user            #配置BASIC认证登录的账号
+      password: 123456      #配置BASIC认证登录的密码
+server:
+  port: 8080                #指定该Eureka实例的端口
+eureka:
+  client:
+    registerWithEureka: false     #禁止注册自身
+    fetchRegistry: false          #因为该服务没有注册到其他注册中心，所以关闭从注册中心拉取服务列表。
+    #如果是服务注册中心集群，需要开启，开启就是去掉该配置，采用默认配置即可
+    serviceUrl:
+      defaultZone: http://user:123456@localhost:8080/eureka/  #服务注册中心地址，http://账号:密码@主机名称:端口/Eureka/
+  server:
+    renewalPercentThreshold: 1    #设置心跳正常的阀值，默认为1，测试时可以调低

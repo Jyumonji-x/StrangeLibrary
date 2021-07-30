@@ -1,0 +1,43 @@
+version: '3'
+services:
+  mysql:
+    container_name: mysql
+    build: database/
+    restart: always
+    ports:
+      - 3306:3306
+    expose:
+      - '3306'
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: password
+  se-backend-server:                                 
+     container_name: se-backend-server   
+     restart: always                     
+     build: ./backend
+     depends_on:
+       - mysql
+     links: 
+       - mysql
+     environment:
+       TZ: Asia/Shanghai
+       USERNAME: root
+       PASSWORD: password
+       DB_URL: mysql:3306/book
+     volumes:                           
+       - ./logs/:/app/log                
+     ports:                              
+       - "8080:8080"
+  se-frontend-server:                                 
+     container_name: se-frontend-server   
+     restart: always                     
+     build: ./frontend
+     environment:
+       TZ: Asia/Shanghai
+       USERNAME: root
+       PASSWORD: password
+     ports:
+       - "80:80"                      
+     depends_on:                         
+       - se-backend-server
+       

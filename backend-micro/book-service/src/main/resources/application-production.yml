@@ -1,0 +1,64 @@
+server:
+  port: 8081
+eureka:
+  client:
+    fetch-registry: true
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: http://user:123456@localhost:8080/eureka/      #服务注册中信地址，含有BASIC认证的用户名和密码
+  instance:
+    prefer-ip-address: true         #将IP注册到服务注册中心
+
+#放开所有节点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+
+
+spring:
+  application:
+    name: book-service
+  profiles:
+    active: test#logging.level.root = DEBUG;
+  datasource:
+    url: jdbc:mysql://mysql:3306/book?serverTimezone=UTC # 修改:3306前的mysql为localhost可本地测试
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database: mysql
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+  mail:
+    username: 1534401580@qq.com
+    password: wbdsrtoxyhpkjjah
+    host: smtp.qq.com
+    port: 465
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+          port: ${spring.mail.port}
+          auth: true
+          starttls:
+            enable: true
+            required: true
+logging:
+  file:
+    path: /var/tmp/mylog.log

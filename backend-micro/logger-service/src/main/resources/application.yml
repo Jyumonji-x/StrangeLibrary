@@ -1,0 +1,51 @@
+server:
+  port: 9099
+eureka:
+  client:
+    fetch-registry: false
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: http://user:123456@localhost:8080/eureka/      #服务注册中信地址，含有BASIC认证的用户名和密码
+  instance:
+    prefer-ip-address: true         #将IP注册到服务注册中心
+
+#放开所有节点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+
+spring:
+  jackson:
+    time-zone: GMT+8
+  application:
+    name: logger-service
+  profiles:
+    active: test#logging.level.root = DEBUG;
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/book?serverTimezone=Asia/Shanghai # 修改:3306前的mysql为localhost可本地测试
+    username: root
+    password: password
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+  sql:
+    init:
+      enabled: true
+logging:
+  file:
+    path: /var/tmp/mylog.log

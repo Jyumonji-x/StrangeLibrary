@@ -1,0 +1,169 @@
+version: '3'
+services:
+  mysql:
+    network_mode: "host"
+    container_name: mysql
+    build: database/
+    restart: always
+    ports:
+      - 3306:3306
+    expose:
+      - '3306'
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: password
+
+  service-discovery:
+    network_mode: "host"
+    container_name: service-discovery
+    restart: always                     
+    build: ./backend-micro/service-discovery
+    depends_on:
+      - mysql
+    environment:
+      TZ: Asia/Shanghai
+      USERNAME: root
+      PASSWORD: password
+      DB_URL: mysql:3306/book
+    volumes:                           
+      - ./logs/:/app/log                
+    ports:                              
+      - "8080:8080"
+      
+  user-service:
+    network_mode: "host"
+    container_name: user-service 
+    restart: always                     
+    build: ./backend-micro/user-service 
+    depends_on:
+      - mysql
+      - service-discovery 
+    environment:
+      TZ: Asia/Shanghai
+      USERNAME: root
+      PASSWORD: password
+      DB_URL: mysql:3306/book
+    volumes:                           
+      - ./logs/:/app/log                
+    ports:                              
+      - "9090:9090"
+      
+  book-service:
+    network_mode: "host"
+    container_name: book-service
+    restart: always                     
+    build: ./backend-micro/book-service
+    depends_on:
+      - mysql
+      - service-discovery 
+    environment:
+      TZ: Asia/Shanghai
+      USERNAME: root
+      PASSWORD: password
+      DB_URL: mysql:3306/book
+    volumes:                           
+      - ./logs/:/app/log                
+    ports:                              
+      - "9091:9091" 
+ 
+  mail-service:
+    network_mode: "host"
+    container_name: mail-service
+    restart: always                     
+    build: ./backend-micro/mail-service
+    depends_on:
+      - mysql
+      - service-discovery 
+    environment:
+      TZ: Asia/Shanghai
+      USERNAME: root
+      PASSWORD: password
+      DB_URL: mysql:3306/book
+    volumes:                           
+      - ./logs/:/app/log                
+    ports:                              
+      - "9080:9080" 
+
+  borrow-service:
+    network_mode: "host"
+    container_name: borrow-service
+    restart: always                     
+    build: ./backend-micro/borrow-service
+    depends_on:
+      - mysql
+      - service-discovery 
+    environment:
+      TZ: Asia/Shanghai
+      USERNAME: root
+      PASSWORD: password
+      DB_URL: mysql:3306/book
+    volumes:                           
+      - ./logs/:/app/log                
+    ports:                              
+      - "9092:9092" 
+
+  comment-service:
+    network_mode: "host"
+    container_name: comment-service
+    restart: always                     
+    build: ./backend-micro/comment-service
+    depends_on:
+      - mysql
+      - service-discovery 
+    environment:
+      TZ: Asia/Shanghai
+      USERNAME: root
+      PASSWORD: password
+      DB_URL: mysql:3306/book
+    volumes:                           
+      - ./logs/:/app/log                
+    ports:                              
+      - "9093:9093" 
+
+  logger-service:
+    network_mode: "host"
+    container_name: logger-service
+    restart: always                     
+    build: ./backend-micro/logger-service
+    depends_on:
+      - mysql
+      - service-discovery 
+    environment:
+      TZ: Asia/Shanghai
+      USERNAME: root
+      PASSWORD: password
+      DB_URL: mysql:3306/book
+    volumes:                           
+      - ./logs/:/app/log                
+    ports:                              
+      - "9099:9099" 
+
+  violation-service:
+    network_mode: "host"
+    container_name: violation-service
+    restart: always                     
+    build: ./backend-micro/violation-service
+    depends_on:
+      - mysql
+      - service-discovery 
+    environment:
+      TZ: Asia/Shanghai
+      USERNAME: root
+      PASSWORD: password
+      DB_URL: mysql:3306/book
+    volumes:                           
+      - ./logs/:/app/log                
+    ports:                              
+      - "9094:9094" 
+
+  se-frontend-server:
+    network_mode: "host"                              
+    container_name: se-frontend-server   
+    restart: always                     
+    build: ./frontend
+    environment:
+      TZ: Asia/Shanghai
+      USERNAME: root
+      PASSWORD: password
+    ports:
+      - "80:80"                      

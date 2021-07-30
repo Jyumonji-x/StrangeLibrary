@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active: test#logging.level.root = DEBUG;
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+  mail:
+    username: 1534401580@qq.com
+    password: wbdsrtoxyhpkjjah
+    host: smtp.qq.com
+    port: 465
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+          port: ${spring.mail.port}
+          auth: true
+          starttls:
+            enable: true
+            required: true
+logging:
+  file:
+    path: /var/tmp/mylog.log
+server:
+  port: 8080
